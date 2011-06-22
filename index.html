@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!-- Inspiration: http://projects.nytimes.com/census/2010/explorer?ref=censusbureau -->
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<meta charset="utf-8">
+	<title>Dotter example</title>
+	<style type="text/css">
+		html, body, #map {
+		  width: 100%; height: 100%; margin: 0; padding: 0;
+		  font-family: sans-serif;
+		}
+		#header, #legend {
+		  position: absolute;
+		  z-index: 1000;
+		  background: rgba(255, 255, 255, .5);
+		}
+		#header { left: 60px; right: 0; font-size: 24px; height: 40px; line-height: 40px; }
+		#header div { padding: 0 90px; }
+		#header p { font: 12px Verdana, sans-serif; position: absolute; top: 0; right: 20px; }
+		#legend { top: 40px; right: 0; padding-bottom: 5px; border-bottom-left-radius: 15px; }
+		#legend img { vertical-align: middle; margin-right: 10px; }
+		#legend div { font-size: 13px; padding: 5px 10px; }
+	</style>
+
+	<link rel="stylesheet" href="leaflet/leaflet.css" />
+	<!--[if lte IE 8]><link rel="stylesheet" href="leaflet/leaflet.ie.css" /><![endif]-->
+	
+	<script>
+		var L_PREFER_CANVAS = true; // experimental
+	</script>
+	
+	<script src="leaflet/leaflet.js"></script>
+
+	<script type="text/javascript" src="dotter.js"></script>
+	<script type="text/javascript" src="crimes.js"></script>
+</head>
+<body>
+	<div id="header">
+		<div>Crimes in SF from 2011-04-25 to 2011-05-25</div>
+		<p>GitHub: <a href="https://github.com/mourner/Leaflet-Dotter">mourner / Leaflet-Dotter</a>, forked from <a href="https://github.com/broady/Dotter">broady / Dotter</a></p>
+	</div>
+	<div id="legend"></div>
+	<div id="map"></div>
+  
+	<script type="text/javascript">
+		var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/22677/256/{z}/{x}/{y}.png',
+			cloudmadeAttribution = 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
+			cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: 18, attribution: cloudmadeAttribution});
+	
+		var map = new L.Map('map', {
+			center: new L.LatLng(37.77, -122.44),
+			zoom: 13,
+			layers: [cloudmade]
+		});
+		
+		var dotter = new Dotter(2);
+		
+		// http://sanfrancisco.crimespotting.org/
+		var group1 = 'rgba(255, 0, 0, .3)',
+			group2 = 'rgba(255, 255, 60, .3)',
+			group3 = 'rgba(60, 255, 60, .3)';
+		
+		var colors = {
+			'AGGRAVATED ASSAULT': group1,
+			'SIMPLE ASSAULT': group1,
+			ROBBERY: group1,
+			
+			NARCOTICS: group2,
+			ALCOHOL: group2,
+			PROSTITUTION: group2,
+			
+			THEFT: group3,
+			'VEHICLE THEFT': group3,
+			VANDALISM: group3,
+			BURGLARY: group3,
+			ARSON: group3
+		}
+	
+		for (var i = 0, crime; crime = incidents[i]; ++i) {
+			var lnglat = crime.lnglat;
+			
+			var marker = new L.CircleMarker(new L.LatLng(lnglat[1], lnglat[0]), {
+				fillColor: colors[crime.type],
+				fillOpacity: 1,
+				radius: 2,
+				stroke: false
+			});
+			
+			marker.bindPopup('Type: ' + crime.type.toLowerCase());
+			
+			map.addLayer(marker);
+		}
+		
+		// Create legend
+		var legendDot = new Dotter(8),
+			legend = document.getElementById('legend'),
+			legendHTML = [];
+		
+		legendHTML.push('<div><img src="', legendDot.getDot('#f00'),
+				'">Assault/Robbery</div>');
+		legendHTML.push('<div><img src="', legendDot.getDot('#ff0'),
+				'">Narcotics/Alcohol/Prostitution</div>');
+		legendHTML.push('<div><img src="', legendDot.getDot('#0f0'),
+				'">Theft/Vandalism/Burglary/Arson</div>');
+		legend.innerHTML = legendHTML.join('');
+	</script>
+</body>
+</html>
