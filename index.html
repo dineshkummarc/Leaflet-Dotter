@@ -21,6 +21,13 @@
 		#legend { top: 40px; right: 0; padding-bottom: 5px; border-bottom-left-radius: 15px; }
 		#legend img { vertical-align: middle; margin-right: 10px; }
 		#legend div { font-size: 13px; padding: 5px 10px; }
+		#legend .legend-dot {
+			float: left;
+			display: inline;
+			width: 16px;
+			height: 16px;
+			margin-right: 10px;
+		}
 	</style>
 
 	<link rel="stylesheet" href="leaflet/leaflet.css" />
@@ -32,7 +39,6 @@
 	
 	<script src="leaflet/leaflet.js"></script>
 
-	<script type="text/javascript" src="dotter.js"></script>
 	<script type="text/javascript" src="crimes.js"></script>
 </head>
 <body>
@@ -97,12 +103,9 @@
 			legend = document.getElementById('legend'),
 			legendHTML = [];
 		
-		legendHTML.push('<div><img src="', legendDot.getDot('#f00'),
-				'">Assault/Robbery</div>');
-		legendHTML.push('<div><img src="', legendDot.getDot('#ff0'),
-				'">Narcotics/Alcohol/Prostitution</div>');
-		legendHTML.push('<div><img src="', legendDot.getDot('#0f0'),
-				'">Theft/Vandalism/Burglary/Arson</div>');
+		legendHTML.push('<div><span class="legend-dot" style="background: #f00">&nbsp;</span> Assault / Robbery</div>');
+		legendHTML.push('<div><span class="legend-dot" style="background: #ff0">&nbsp;</span> Narcotics / Alcohol / Prostitution</div>');
+		legendHTML.push('<div><span class="legend-dot" style="background: #0f0">&nbsp;</span> Theft / Vandalism / Burglary / Arson</div>');
 		legend.innerHTML = legendHTML.join('');
 	</script>
 </body>
