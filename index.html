@@ -60,8 +60,6 @@
 			layers: [cloudmade]
 		});
 		
-		var dotter = new Dotter(2);
-		
 		// http://sanfrancisco.crimespotting.org/
 		var group1 = 'rgba(255, 0, 0, .3)',
 			group2 = 'rgba(255, 255, 60, .3)',
@@ -99,8 +97,7 @@
 		}
 		
 		// Create legend
-		var legendDot = new Dotter(8),
-			legend = document.getElementById('legend'),
+		var legend = document.getElementById('legend'),
 			legendHTML = [];
 		
 		legendHTML.push('<div><span class="legend-dot" style="background: #f00">&nbsp;</span> Assault / Robbery</div>');
